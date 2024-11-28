@@ -81,12 +81,25 @@ ws = wb.active
 # Define the red fill for conditional formatting
 red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
 
-# Apply conditional formatting to rows where PE Ratio is more than 50
+# Define the orange fill for conditional formatting
+orange_fill = PatternFill(start_color="FFA500", end_color="FFA500", fill_type="solid")
+
+# Define the yellow fill for conditional formatting
+yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+
+# Apply conditional formatting to rows where PE Ratio is more than 50 (red), between 30 and 49 (orange), or between 25 and 35 (yellow)
 for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
     pe_ratio_cell = row[1]  # Assuming PE Ratio is in the second column
-    if pe_ratio_cell.value is not None and pe_ratio_cell.value > 50:
-        for cell in row:
-            cell.fill = red_fill
+    if pe_ratio_cell.value is not None:
+        if pe_ratio_cell.value > 50:
+            for cell in row:
+                cell.fill = red_fill
+        elif 35 <= pe_ratio_cell.value <= 49:
+            for cell in row:
+                cell.fill = orange_fill
+        elif 25 <= pe_ratio_cell.value < 35:
+            for cell in row:
+                cell.fill = yellow_fill
 
 # Auto-adjust column widths based on the title
 for column in ws.columns:
