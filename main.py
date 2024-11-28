@@ -108,7 +108,7 @@ stock_details_list = []
 for symbol in stock_symbols:
     stock_details = get_details_of_stock(symbol)
     if stock_details:
-        time.sleep(2)
+        time.sleep(1)
         stock_details_list.append(stock_details)
     else:
         print(f"No data found for {symbol}")
@@ -133,10 +133,10 @@ for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max
         if pe_ratio_cell.value > 50:
             for cell in row:
                 cell.fill = red_fill
-        elif 30 <= pe_ratio_cell.value <= 49:
+        elif 30 <= pe_ratio_cell.value <= 50:
             for cell in row:
                 cell.fill = orange_fill
-        elif 25 <= pe_ratio_cell.value < 30:
+        elif 24 <= pe_ratio_cell.value < 30:
             for cell in row:
                 cell.fill = yellow_fill
 
