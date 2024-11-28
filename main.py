@@ -81,12 +81,25 @@ ws = wb.active
 # Define the red fill for conditional formatting
 red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
 
-# Apply conditional formatting to rows where PE_Ratio is more than 50
+# Apply conditional formatting to rows where PE Ratio is more than 50
 for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
-    pe_ratio_cell = row[1]  # Assuming PE_Ratio is in the second column
+    pe_ratio_cell = row[1]  # Assuming PE Ratio is in the second column
     if pe_ratio_cell.value is not None and pe_ratio_cell.value > 50:
         for cell in row:
             cell.fill = red_fill
+
+# Auto-adjust column widths based on the title
+for column in ws.columns:
+    max_length = 0
+    column = list(column)
+    for cell in column:
+        try:
+            if len(str(cell.value)) > max_length:
+                max_length = len(cell.value)
+        except:
+            pass
+    adjusted_width = (max_length + 2)
+    ws.column_dimensions[column[0].column_letter].width = adjusted_width
 
 # Save the workbook with the applied formatting
 wb.save(excel_filename)
