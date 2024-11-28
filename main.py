@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill
 
 def get_details_of_stock(stock_symbol):
     url = f"https://www.screener.in/company/{stock_symbol}/consolidated"
@@ -43,13 +45,13 @@ def get_details_of_stock(stock_symbol):
 
             return {
                 "Symbol": stock_symbol,
-                "PE_Ratio": pe_ratio_value,
-                "Current_price": current_price_value,
+                "PE Ratio": pe_ratio_value,
+                "Current Price": current_price_value,
                 "High": high_value,
                 "Low": low_value,
                 "ROCE": float(roce_value),
-                "Percentage_change_from_high": percentage_change_from_high,
-                "Percentage_change_from_low": percentage_change_from_low
+                "Percentage change from high": percentage_change_from_high,
+                "Percentage change from low": percentage_change_from_low
             }
         else:
             return None
@@ -71,5 +73,22 @@ for symbol in stock_symbols:
 df = pd.DataFrame(stock_details_list)
 excel_filename = 'stock_details.xlsx'
 df.to_excel(excel_filename, index=False)
+
+# Load the workbook and select the active worksheet
+wb = load_workbook(excel_filename)
+ws = wb.active
+
+# Define the red fill for conditional formatting
+red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
+
+# Apply conditional formatting to rows where PE_Ratio is more than 50
+for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
+    pe_ratio_cell = row[1]  # Assuming PE_Ratio is in the second column
+    if pe_ratio_cell.value is not None and pe_ratio_cell.value > 50:
+        for cell in row:
+            cell.fill = red_fill
+
+# Save the workbook with the applied formatting
+wb.save(excel_filename)
 
 print(f'Stock details saved to {excel_filename}')
