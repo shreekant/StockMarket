@@ -1,27 +1,41 @@
 import requests
-import time
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
+import time
 
 def fetch_stock_details(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
+    retries = 3
+    for _ in range(retries):
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-        pe_ratio_element = soup.find('span', string=lambda x: x and 'P/E' in x)
-        high_low_element = soup.find('span', string=lambda x: x and 'High / Low' in x)
-        roce_element = soup.find('span', string=lambda x: x and 'ROCE' in x)
-        current_price_element = soup.find('span', string=lambda x: x and 'Current Price' in x)
+            pe_ratio_element = soup.find('span', string=lambda x: x and 'P/E' in x)
+            high_low_element = soup.find('span', string=lambda x: x and 'High / Low' in x)
+            roce_element = soup.find('span', string=lambda x: x and 'ROCE' in x)
+            current_price_element = soup.find('span', string=lambda x: x and 'Current Price' in x)
 
-        pe_ratio = pe_ratio_element.find_next_sibling('span').text.strip() if pe_ratio_element else None
-        high_low_value = high_low_element.find_next_sibling('span').text.strip() if high_low_element else None
-        roce_value = roce_element.find_next_sibling('span').text.strip() if roce_element else None
-        current_price = current_price_element.find_next_sibling('span').text.strip() if current_price_element else None
+            pe_ratio = pe_ratio_element.find_next_sibling('span').text.strip() if pe_ratio_element else None
+            high_low_value = high_low_element.find_next_sibling('span').text.strip() if high_low_element else None
+            roce_value = roce_element.find_next_sibling('span').text.strip() if roce_element else None
+            current_price = current_price_element.find_next_sibling('span').text.strip() if current_price_element else None
 
-        return pe_ratio, high_low_value, roce_value, current_price
+            # print(f"URL: {url}")
+            # print(f"PE Ratio: {pe_ratio}")
+            # print(f"High/Low: {high_low_value}")
+            # print(f"ROCE: {roce_value}")
+            # print(f"Current Price: {current_price}")
+
+            return pe_ratio, high_low_value, roce_value, current_price
+        elif response.status_code == 429:
+            print(f"Rate limit exceeded for {url}. Retrying in 2 seconds...")
+            time.sleep(2)
+        else:
+            print(f"Failed to fetch data from {url} with status code {response.status_code}")
+            break
     return None, None, None, None
 
 def get_details_of_stock(stock_symbol):
@@ -96,19 +110,17 @@ def get_details_of_stock(stock_symbol):
 
 stock_symbols = [
     '5PAISA','ADANIPORTS','ARMANFIN','AXISBANK','BAJAJ-AUTO','BANDHANBNK','BHEL','CDSL','CENTRALBK','CIPLA',
-    'CUB','DREAMFOLKS','DRREDDY'
+    'CUB','DREAMFOLKS','DRREDDY','OLECTRA','GREENPANEL','HDFCBANK','HINDUNILVR','ISEC','IDEA','IDFCFIRSTB',
+    'IDFC','IOC','IRFC','IRCON','JIOFIN','514448','KOTAKBANK','MANAPPURAM','NFL','NHPC','NTPC','OIL','ONGC',
+    'PIIND','PNB','PVRINOX','RVNL','RELIANCE','SBICARD','SUPRIYA','TATAINVEST','TATAELXSI','TATAMOTORS',
+    'TATAPOWER','TCS','TATASTEEL','UJJIVANSFB','WIPRO'
     ]
 
-# stock_symbols = [
-#     'HINDUNILVR','TCS', '5PAISA', 'ADANIPORTS', 'ARMANFIN', 'AXISBANK', 'BAJAJ-AUTO',
-#     'BHEL', 'CDSL', 'BANDHANBNK', 'SWIGGY'
-#     ]
 stock_details_list = []
 
 for symbol in stock_symbols:
     stock_details = get_details_of_stock(symbol)
     if stock_details:
-        time.sleep(1)
         stock_details_list.append(stock_details)
     else:
         print(f"No data found for {symbol}")
@@ -157,4 +169,3 @@ for column in ws.columns:
 wb.save(excel_filename)
 
 print(f'Stock details saved to {excel_filename}')
-
