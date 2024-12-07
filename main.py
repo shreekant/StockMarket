@@ -4,6 +4,7 @@ import re
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
+from stock_symbols import stock_symbols
 import time
 
 def fetch_stock_details(url):
@@ -107,14 +108,6 @@ def get_details_of_stock(stock_symbol):
             "Percentage change from low": percentage_change_from_low
         }
     return None
-
-stock_symbols = [
-    '5PAISA','ADANIPORTS','ARMANFIN','AXISBANK','BAJAJ-AUTO','BANDHANBNK','BHEL','CDSL','CENTRALBK','CIPLA',
-    'CUB','DREAMFOLKS','DRREDDY','OLECTRA','GREENPANEL','HDFCBANK','HINDUNILVR','ISEC','IDEA','IDFCFIRSTB',
-    'IDFC','IOC','IRFC','IRCON','JIOFIN','514448','KOTAKBANK','MANAPPURAM','NFL','NHPC','NTPC','OIL','ONGC',
-    'PIIND','PNB','PVRINOX','RVNL','RELIANCE','SBICARD','SUPRIYA','TATAINVEST','TATAELXSI','TATAMOTORS',
-    'TATAPOWER','TCS','TATASTEEL','UJJIVANSFB','WIPRO'
-    ]
 
 stock_details_list = []
 
