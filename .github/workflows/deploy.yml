@@ -1,0 +1,36 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get install -y sshpass
+
+    - name: Deploy to PythonAnywhere
+      env:
+        USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
+        API_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+      run: |
+        # Zip the contents of the repository
+        zip -r deploy.zip .
+
+        # Upload the zip file to PythonAnywhere
+        curl -X POST https://www.pythonanywhere.com/api/v0/user/$USERNAME/files/path/home/$USERNAME/deploy.zip \
+          -H "Authorization: Token $API_TOKEN" \
+          --data-binary @deploy.zip
+
+        # SSH into PythonAnywhere and deploy the code
+        sshpass -p $API_TOKEN ssh $USERNAME@ssh.pythonanywhere.com 'cd ~/ && unzip -o deploy.zip && rm deploy.zip'
+        # Reload the web app
+        sshpass -p $API_TOKEN ssh $USERNAME@ssh.pythonanywhere.com 'pa_reload_web_app.sh'
