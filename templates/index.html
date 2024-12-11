@@ -6,12 +6,41 @@
     <title>Run Script</title>
 </head>
 <body>
-    <form action="{{ url_for('run_script') }}" method="get">
+    <h1>Run Script</h1>
+    <form id="run-script-form" action="{{ url_for('run_script') }}" method="get">
         <button type="submit">Run Script</button>
     </form>
     <form action="{{ url_for('show_excel') }}" method="get">
         <button type="submit">Show Excel</button>
     </form>
+    <div id="loading-message" style="display: none;">Please wait...</div>
+
+    <script>
+        document.getElementById('run-script-form').addEventListener('submit', function(event) {
+            document.getElementById('loading-message').style.display = 'block';
+            document.getElementById('loading-message').innerText = 'Please wait...';
+        });
+
+        // Polling function to check if the script has completed
+        function checkScriptStatus() {
+            console.log('Checking script status...');
+            fetch('{{ url_for("check_status") }}')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Script status:', data.status);
+                    if (data.status === 'completed') {
+                        document.getElementById('loading-message').innerText = 'File is ready to view';
+                    } else {
+                        setTimeout(checkScriptStatus, 1000); // Check again after 1 second
+                    }
+                });
+        }
+
+        // Start polling when the form is submitted
+        document.getElementById('run-script-form').addEventListener('submit', function(event) {
+            checkScriptStatus();
+        });
+    </script>
 </body>
 </html>
 <style>
@@ -47,5 +76,10 @@
     }
     button:hover {
         background-color: #0056b3;
+    }
+    #loading-message {
+        font-size: 18px;
+        color: #333;
+        margin-top: 20px;
     }
 </style>
