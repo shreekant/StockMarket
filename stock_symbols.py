@@ -27,6 +27,7 @@ stock_symbols = [
 '514448',
 'KOTAKBANK',
 'MANAPPURAM',
+'NESTLEIND',
 'NFL',
 'NHPC',
 'NTPC',
@@ -47,5 +48,4 @@ stock_symbols = [
 'TATASTEEL',
 'UJJIVANSFB',
 'WIPRO'
-
 ]

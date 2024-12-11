@@ -7,7 +7,10 @@
 </head>
 <body>
     <form action="{{ url_for('run_script') }}" method="get">
-        <button type="submit">Run Script</script></button>
+        <button type="submit">Run Script</button>
+    </form>
+    <form action="{{ url_for('show_excel') }}" method="get">
+        <button type="submit">Show Excel</button>
     </form>
 </body>
 </html>
@@ -21,6 +24,7 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        flex-direction: column;
     }
     h1 {
         color: #333;
@@ -30,6 +34,7 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
     }
     button {
         background-color: #007bff;
