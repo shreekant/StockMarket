@@ -22,7 +22,7 @@ jobs:
         USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
         API_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
       run: |
-        # Zip the contents of the repository
+        ls -lart
         zip -r deploy.zip .
 
         # Upload the zip file to PythonAnywhere
