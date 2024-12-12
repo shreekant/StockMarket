@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Run Script</title>
+    <title>Generate Stock Market data</title>
 </head>
 <body>
-    <h1>Run Script</h1>
+    <h1>Generate stock market data</h1>
     <form id="run-script-form" action="{{ url_for('run_script') }}" method="get">
-        <button type="submit">Run Script</button>
+        <button type="submit">Generate data</button>
     </form>
     <form action="{{ url_for('show_excel') }}" method="get">
-        <button type="submit">Show Excel</button>
+        <button type="submit">Download data</button>
     </form>
     <div id="loading-message" style="display: none;">Please wait...</div>
 
