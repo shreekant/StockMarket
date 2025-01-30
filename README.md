@@ -23,6 +23,11 @@ This repo also contains [stock_symbols.py](stock_symbols.py) file that contains 
 ```
 pip3 install requests flask flask_bootstrap pandas openpyxl
 ```
-## Status
 
+## Python virtual environment setup
+- `python3 -m venv venv`
+- `source venv/bin/activate`
+- `pip install -r requirements.txt`
+
+## Status
 [![Deploy to PythonAnywhere](https://github.com/shreekant/StockMarket/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/shreekant/StockMarket/actions/workflows/deploy.yml)
