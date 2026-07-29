@@ -27,6 +27,7 @@ pip3 install requests flask flask_bootstrap pandas openpyxl
 ## Python virtual environment setup
 - `python3 -m venv venv`
 - `source venv/bin/activate`
+- 
 - `pip install -r requirements.txt`
 
 ## Status
