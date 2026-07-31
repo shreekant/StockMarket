@@ -21,13 +21,22 @@ This repo also contains [stock_symbols.py](stock_symbols.py) file that contains 
 
 ## Dependencies
 ```
-pip3 install requests flask flask_bootstrap pandas openpyxl
+pip3 install requests flask flask_bootstrap pandas openpyxl os streamlit
 ```
 
 ## Python virtual environment setup
 - `python3 -m venv venv`
 - `source venv/bin/activate`
 - `pip install -r requirements.txt`
+
+## How to run
+- Open the terminal
+- Navigate to the folder
+- Run these commands: 
+    ```
+    pip install -r requirements.txt
+    streamlit run main.py 
+    ```
 
 ## Status
 [![Deploy to PythonAnywhere](https://github.com/shreekant/StockMarket/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/shreekant/StockMarket/actions/workflows/deploy.yml)
